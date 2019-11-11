@@ -1,0 +1,260 @@
+ID,Type,Text,Goto
+,SetVariable-woocommerce_domain,,
+,SetVariable-consumer_key,,
+,SetVariable-consumer_secret,,
+1.1,Dialogue,Hi. I am Woocommerce Bot,2
+2.1,Dialogue,What do you want to do?,
+2.2,Button,Browse Categories,3
+2.3,Button,Search Products,11
+2.4,Button,Check Order Status,15
+2.5,Button,Contact Customer Care,20
+3.1,Dialogue,Please choose a category to browse.,4
+,SetVariable-category_page,1,
+4.1,Dialogue,,
+,SendRequest-GET-https://{{vars.consumer_key}}:{{vars.consumer_secret}}@{{vars.woocommerce_domain}}/wp-json/wc/v3/products/categories?page={{vars.category_page}}&per_page=5,"{
+    ""save_to_var"": ""categories""
+}",
+,SetVariable-car_data,"[
+    {
+        ""image"": ""{{#vars.categories.body.0.image}}{{vars.categories.body.0.image.src}}{{/vars.categories.body.0.image}}"",
+        ""button1"": ""{{#vars.categories.body.0.name}}View products{{/vars.categories.body.0.name}}"",
+        ""button1_goto"": ""7"",
+        ""id"": ""{{vars.categories.body.0.id}}"",
+        ""title"": ""{{vars.categories.body.0.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.categories.body.0.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.categories.body.1.image}}{{vars.categories.body.1.image.src}}{{/vars.categories.body.1.image}}"",
+        ""button1"": ""{{#vars.categories.body.1.name}}View products{{/vars.categories.body.1.name}}"",
+        ""button1_goto"": ""7"",
+        ""id"": ""{{vars.categories.body.1.id}}"",
+        ""title"": ""{{vars.categories.body.1.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.categories.body.1.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.categories.body.2.image}}{{vars.categories.body.2.image.src}}{{/vars.categories.body.2.image}}"",
+        ""button1"": ""{{#vars.categories.body.2.name}}View products{{/vars.categories.body.2.name}}"",
+        ""button1_goto"": ""7"",
+        ""id"": ""{{vars.categories.body.2.id}}"",
+        ""title"": ""{{vars.categories.body.2.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.categories.body.2.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.categories.body.3.image}}{{vars.categories.body.3.image.src}}{{/vars.categories.body.3.image}}"",
+        ""button1"": ""{{#vars.categories.body.3.name}}View products{{/vars.categories.body.3.name}}"",
+        ""button1_goto"": ""7"",
+        ""id"": ""{{vars.categories.body.3.id}}"",
+        ""title"": ""{{vars.categories.body.3.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.categories.body.3.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.categories.body.4.image}}{{vars.categories.body.4.image.src}}{{/vars.categories.body.4.image}}"",
+        ""button1"": ""{{#vars.categories.body.4.name}}View products{{/vars.categories.body.4.name}}"",
+        ""button1_goto"": ""7"",
+        ""id"": ""{{vars.categories.body.4.id}}"",
+        ""title"": ""{{vars.categories.body.4.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.categories.body.4.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    }
+]",
+4.2,IF-categories.body,,5
+4.3,Dialogue,End of list.,
+4.4,Button,Start from Beginning,3
+4.5,Button,Go Back to Main Menu,2
+5.1,Carousel,"{
+    ""source_var"": ""car_data"",
+    ""img_url"": ""image"",
+    ""title"": ""title"",
+    ""desc"": ""desc"",
+    ""button1"": ""button1"",
+    ""button1_goto"": ""button1_goto""
+}",
+5.2,Button,Start from Beginning,3
+5.3,Button,Next,6
+5.4,Button,Go Back to Main Menu,2
+6.1,Dialogue,,4
+,SetVariable-category_page-number,{{vars.category_page}}+1,
+7.1,Dialogue,Here are some products from the selected category,8
+,SetVariable-product_page,1,
+8.1,Dialogue,,
+,SendRequest-GET-https://{{vars.consumer_key}}:{{vars.consumer_secret}}@{{vars.woocommerce_domain}}/wp-json/wc/v3/products?page={{vars.product_page}}&per_page=5&category={{vars.GLOBAL.selected_car_elem.id}},"{
+    ""save_to_var"": ""items""
+}",
+,SetVariable-car_data,"[
+    {
+        ""image"": ""{{#vars.items.body.0.images.0}}{{vars.items.body.0.images.0.src}}{{/vars.items.body.0.images.0}}"",
+        ""button1"": ""{{#vars.items.body.0.name}}View more{{/vars.items.body.0.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.0.name}}{{vars.items.body.0.permalink}}{{/vars.items.body.0.name}}"",
+        ""title"": ""{{vars.items.body.0.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.0.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.items.body.1.images.0}}{{vars.items.body.1.images.0.src}}{{/vars.items.body.1.images.0}}"",
+        ""button1"": ""{{#vars.items.body.1.name}}View more{{/vars.items.body.1.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.1.name}}{{vars.items.body.1.permalink}}{{/vars.items.body.1.name}}"",
+        ""title"": ""{{vars.items.body.1.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.1.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.items.body.2.images.0}}{{vars.items.body.2.images.0.src}}{{/vars.items.body.2.images.0}}"",
+        ""button1"": ""{{#vars.items.body.2.name}}View more{{/vars.items.body.2.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.2.name}}{{vars.items.body.2.permalink}}{{/vars.items.body.2.name}}"",
+        ""title"": ""{{vars.items.body.2.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.2.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.items.body.3.images.0}}{{vars.items.body.3.images.0.src}}{{/vars.items.body.3.images.0}}"",
+        ""button1"": ""{{#vars.items.body.3.name}}View more{{/vars.items.body.3.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.3.name}}{{vars.items.body.3.permalink}}{{/vars.items.body.3.name}}"",
+        ""title"": ""{{vars.items.body.3.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.3.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.items.body.4.images.0}}{{vars.items.body.4.images.0.src}}{{/vars.items.body.4.images.0}}"",
+        ""button1"": ""{{#vars.items.body.4.name}}View more{{/vars.items.body.4.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.4.name}}{{vars.items.body.4.permalink}}{{/vars.items.body.4.name}}"",
+        ""title"": ""{{vars.items.body.4.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.4.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    }
+]",
+8.2,IF-items.body,,9
+8.3,Dialogue,End of list.,
+8.4,Button,Start from Beginning,8
+8.5,Button,Go Back to Categories,5
+8.6,Button,Go Back to Main Menu,2
+9.1,Carousel,"{
+    ""source_var"": ""car_data"",
+    ""img_url"": ""image"",
+    ""title"": ""title"",
+    ""desc"": ""desc"",
+    ""button1"": ""button1"",
+    ""button1_goto"": ""button1_goto""
+}",
+9.2,Button,Next,10
+9.3,Button,Start from Beginning,8
+9.4,Button,Go Back to Categories,5
+9.5,Button,Go Back to Main Menu,2
+10.1,Dialogue,,8
+,SetVariable-product_page-number,{{vars.product_page}}+1,
+11.1,Text-search_query,Enter query to search,
+,SetVariable-search_page,1,
+11.2,Dialogue,Here are some products matching <b>{{vars.search_query}}</b>.,12
+12.1,Dialogue,,
+,SendRequest-GET-https://{{vars.consumer_key}}:{{vars.consumer_secret}}@{{vars.woocommerce_domain}}/wp-json/wc/v3/products?page={{vars.search_page}}&per_page=5&search={{vars.search_query}},"{
+    ""save_to_var"": ""items""
+}",
+,SetVariable-car_data,"[
+    {
+        ""image"": ""{{#vars.items.body.0.images.0}}{{vars.items.body.0.images.0.src}}{{/vars.items.body.0.images.0}}"",
+        ""button1"": ""{{#vars.items.body.0.name}}View more{{/vars.items.body.0.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.0.name}}{{vars.items.body.0.permalink}}{{/vars.items.body.0.name}}"",
+        ""title"": ""{{vars.items.body.0.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.0.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.items.body.1.images.0}}{{vars.items.body.1.images.0.src}}{{/vars.items.body.1.images.0}}"",
+        ""button1"": ""{{#vars.items.body.1.name}}View more{{/vars.items.body.1.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.1.name}}{{vars.items.body.1.permalink}}{{/vars.items.body.1.name}}"",
+        ""title"": ""{{vars.items.body.1.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.1.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.items.body.2.images.0}}{{vars.items.body.2.images.0.src}}{{/vars.items.body.2.images.0}}"",
+        ""button1"": ""{{#vars.items.body.2.name}}View more{{/vars.items.body.2.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.2.name}}{{vars.items.body.2.permalink}}{{/vars.items.body.2.name}}"",
+        ""title"": ""{{vars.items.body.2.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.2.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.items.body.3.images.0}}{{vars.items.body.3.images.0.src}}{{/vars.items.body.3.images.0}}"",
+        ""button1"": ""{{#vars.items.body.3.name}}View more{{/vars.items.body.3.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.3.name}}{{vars.items.body.3.permalink}}{{/vars.items.body.3.name}}"",
+        ""title"": ""{{vars.items.body.3.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.3.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    },
+    {
+        ""image"": ""{{#vars.items.body.4.images.0}}{{vars.items.body.4.images.0.src}}{{/vars.items.body.4.images.0}}"",
+        ""button1"": ""{{#vars.items.body.4.name}}View more{{/vars.items.body.4.name}}"",
+        ""button1_goto"": ""{{#vars.items.body.4.name}}{{vars.items.body.4.permalink}}{{/vars.items.body.4.name}}"",
+        ""title"": ""{{vars.items.body.4.name}}"",
+        ""desc"": ""{{#jsonEscape}}{{#removeHtml}}{{{vars.items.body.4.description}}}{{/removeHtml}}{{/jsonEscape}}""
+    }
+]",
+12.2,IF-items.body,,13
+12.3,Dialogue,No products found.,
+12.4,Button,Search for Another Product,11
+12.5,Button,Go Back to Main Menu,2
+13.1,Carousel,"{
+    ""source_var"": ""car_data"",
+    ""img_url"": ""image"",
+    ""title"": ""title"",
+    ""desc"": ""desc"",
+    ""button1"": ""button1"",
+    ""button1_goto"": ""button1_goto""
+}",
+13.2,Button,Next,14
+13.3,Button,Search for Another Product,11
+13.4,Button,Go Back to Main Menu,2
+14.1,Dialogue,,12
+,SetVariable-search_page-number,{{vars.search_page}}+1,
+15.1,Text-order_query,Please enter your Email or Order ID,
+,Response-regex_match,^\S+@\S+$,17
+,Response-regex_match,^[0-9]+$,19
+16.1,Dialogue,Please enter a valid Email or Order ID,15
+17.1,Dialogue,Getting your most recent Order,
+,SendRequest-GET-https://{{vars.consumer_key}}:{{vars.consumer_secret}}@{{vars.woocommerce_domain}}/wp-json/wc/v3/customers?email={{vars.order_query}},"{
+    ""save_to_var"": ""customer""
+}",
+17.2,IF-customer.body,,18
+17.3,Dialogue,No customer found with the email <b>{{vars.order_query}}</b>.,
+17.4,Button,Try Again,15
+17.5,Button,Go Back to Main Menu,2
+18.1,Dialogue,,
+,SendRequest-GET-https://{{vars.consumer_key}}:{{vars.consumer_secret}}@{{vars.woocommerce_domain}}/wp-json/wc/v3/orders?customer={{vars.customer.body.0.id}},"{
+    ""save_to_var"": ""orders""
+}",
+,SetVariable-order_query,{{vars.orders.body.0.id}},
+18.2,IF-orders.body,,19
+18.3,Dialogue,You do not have any orders.,
+18.4,Button,Try Again,15
+18.5,Button,Go Back to Main Menu,2
+19.1,Dialogue,Here details for your order <b>#{{vars.order_query}}</b>,
+,SendRequest-GET-https://{{vars.consumer_key}}:{{vars.consumer_secret}}@{{vars.woocommerce_domain}}/wp-json/wc/v3/orders/{{vars.order_query}},"{
+    ""save_to_var"": ""order_status""
+}",
+19.2,Dialogue,"<b>Status</b>: {{vars.order_status.body.status}}
+<br />
+<b>Payment Method</b>: {{vars.order_status.body.payment_method_title}}
+<br />
+<b>Transaction ID</b>: {{vars.order_status.body.transaction_id}}",
+19.3,Button,Check Another Order Status,15
+19.4,Button,Go Back to Main Menu,2
+20.1,TextWidget-CustomerName,Please enter your name,
+20.2,Dialogue,Please select a method of contact,
+20.3,Button,Phone,21
+20.4,Button,Email,22
+21.1,TextWidget-PhoneNumber,Please enter your Phone Number (with country code),
+21.2,Dialogue,(DEMO ONLY) - This is where call is connected via Phone (powered by Twilio),2
+22.1,EmailWidget-Email,Please enter your Email,
+22.2,Dialogue,We'll contact you shortly.,2
+23.1,Dialogue,Your returns policy comes here,
+23.2,Dialogue,Returns page link comes here,
+24.1,Dialogue,You said something that I don't yet understand.,
+24.2,Dialogue,Let me pass this on to my seniors (Human Staff),20
+,fallback,,24
+,Intent-greeting,"hi
+hello
+hey
+heya",1
+,Intent-TalktoHuman,"Talk to human
+Talk to support
+Customer support phone number
+How can I contact you
+Talk to someone
+Talk to owner",20
+,Intent-ReturnsPolicy,"Returns policy
+How can I return your product?
+What is your return policy
+What if I wish to return a product
+How can I apply for refunds
+What is your returns policy
+How can I file a return",23
